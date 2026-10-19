@@ -1,4 +1,11 @@
 // Application entry point: mounts the React app into index.html.
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { App } from './app/App';
+import './ui/styles.css';
 
-createRoot(document.getElementById('root')!).render(<p>CO Reports</p>);
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
