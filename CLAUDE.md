@@ -56,6 +56,18 @@ dist/            single-file build for manual testing (see below)
 
 ## Build and test
 
-- Commands will be added here once the project is scaffolded.
+Requires Node.js 20+ (development only; the server never runs Node, see D-011).
+
+| Command | What it does |
+|---|---|
+| `npm install` | Install dependencies |
+| `npm run dev` | Local dev server with hot reload |
+| `npm test` | Run unit tests (Vitest) |
+| `npm run typecheck` | TypeScript check without building |
+| `npm run sample-data` | Regenerate synthetic files in `sample-data/` (deterministic) |
+| `npm run build` | Build `dist/co-reports.html` (single self-contained file) |
+
+Deployment: copy `dist/co-reports.html` to the IIS site folder (rename to `index.html` or set it as default document). The same file works when opened from a network drive.
+
 - After each session that changes the UI, produce a **single-file build** (`dist/co-reports.html`) that the owner can download and open in Edge/Chrome without installing anything.
 - Calculations and checks must have unit tests using the sample data.

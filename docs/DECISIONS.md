@@ -54,4 +54,19 @@ Each entry: date, decision, reason, status. New decisions are added at the botto
 ### D-010 · 2026-10-15 · Proposed front-end stack (to confirm in the first planning session)
 **Proposal:** Vite + TypeScript + React; Apache ECharts for charts; SheetJS for reading Excel; ExcelJS for formatted Excel export; PptxGenJS for PowerPoint; single-file build option for the network-drive fallback and manual testing.
 **Reason:** Widely used, well-documented libraries that run fully offline. Server side to be aligned with the HR application once its stack is known.
-**Status:** Proposed
+**Status:** Superseded by D-012
+
+### D-011 · 2026-10-19 · Deployment target: Windows Server + IIS, static files
+**Decision:** The front end is deployed to the plant's Windows Server as static files served by IIS. Node.js/npm are used only for development and build (in Claude Code); the server never runs Node.
+**Reason:** IIS is the existing web server on the plant VM (D-002). A static build needs no runtime installation and no IT involvement beyond copying a file.
+**Consequences:** Routing uses URL hashes (`#/sales/cockpit`) so no IIS URL Rewrite module is needed. Until a server-side API exists, data is stored in the user's browser (IndexedDB) and is not shared between users.
+**Status:** Accepted
+
+### D-012 · 2026-10-19 · Front-end stack confirmed (amends D-010)
+**Decision:** Vite + TypeScript + React; Apache ECharts (charts); ExcelJS (formatted Excel export and sample-data generation); PptxGenJS (PowerPoint); Vitest (unit tests); `vite-plugin-singlefile` builds one self-contained file `dist/co-reports.html`. Libraries are installed when the first feature needs them.
+**Changes vs D-010:**
+- **One build output, one file.** The same `co-reports.html` is used on IIS and on the network drive (D-003). A multi-file build is added only if file size or caching becomes a problem.
+- **SheetJS (reading source Excel files):** the npm package `xlsx` is frozen at 0.18.5 and misses later security fixes; newer versions are published only at `cdn.sheetjs.com`. When the first adapter is built, the official `.tgz` is stored in `vendor/` and installed from there. `cdn.sheetjs.com` is currently blocked by the development environment's network policy and must be allowed first. Fallback: read `.xlsx` with ExcelJS (no legacy `.xls` support).
+- **Own minimal hash router** instead of an extra routing library.
+**Alternative considered:** Preact or Svelte (smaller bundles) — not chosen; React has the widest documentation and examples.
+**Status:** Accepted
