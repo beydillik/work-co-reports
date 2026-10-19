@@ -1,0 +1,4 @@
+node_modules/
+*.log
+.DS_Store
+# dist/ is committed on purpose: the owner downloads dist/co-reports.html for manual testing.
